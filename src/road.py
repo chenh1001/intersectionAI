@@ -44,8 +44,8 @@ class Road:
             # If vehicle has a next road
             if vehicle.path:
                 # New length is the remaining path outside the current road
-                # vehicle.x -= self.length
-                vehicle.x = 0
+                vehicle.x -= self.length
+                # vehicle.x = 0
 
                 # Add it to the next road
                 next_road = vehicle.path[0]

@@ -32,7 +32,7 @@ class Window:
     def set_default_config(self):
         """Set default configuration."""
 
-        self.fps = 20
+        self.fps = 60
         self.zoom = 5
         self.offset = (0, 0)
 
