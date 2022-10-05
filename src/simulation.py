@@ -1,4 +1,5 @@
 from road import Road
+from vehicle_generator import VehicleGenerator
 
 class Simulation:
     """Update roads and vehicles."""
@@ -16,6 +17,12 @@ class Simulation:
         self.frame_count: int = 0  # Frame count keeping
         self.d_time: float = 1 / 60  # Simulation time step
         self.roads = []  # Array to store roads
+        self.generators = []
+    
+    def create_gen(self, config={}):
+        gen = VehicleGenerator(self, config)
+        self.generators.append(gen)
+        return gen
 
     def create_road(self, *points):
         road = Road(*points)
@@ -30,24 +37,10 @@ class Simulation:
         # Update every road
         for road in self.roads:
             road.update(self.d_time)
-
-            if len(road.vehicles) == 0: continue
-            
-            vehicle = road.vehicles[0]
-            # If first vehicle is out of road bounds
-            if vehicle.x >= road.length:
-                # If vehicle has a next road
-                if vehicle.current_road_index + 1 < len(vehicle.path):
-                    # New length is the remaining path outside the current road
-                    vehicle.x = vehicle.x - road.length
-
-                    # Add it to the next road
-                    vehicle.current_road_index += 1
-                    next_road_index = vehicle.path[vehicle.current_road_index]
-                    self.roads[next_road_index].vehicles.append(vehicle)
-
-                # In all cases, remove it from its road
-                road.vehicles.pop(vehicle)
+        
+        # Add vehicles
+        for gen in self.generators:
+            gen.update()
 
         # Increment time
         self.time += self.d_time
@@ -56,3 +49,5 @@ class Simulation:
     def run(self, steps):
         for _ in range(steps):
             self.update()
+        
+      

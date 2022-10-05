@@ -4,6 +4,7 @@ from typing import Iterable, Tuple
 import pygame
 from pygame import gfxdraw
 from math import sqrt
+import numpy as np
 
 from simulation import Simulation
 from vehicle import Vehicle
@@ -14,7 +15,7 @@ class Window:
     """Window class."""
 
     WINDOW_WIDTH = 1400
-    WINDOW_HEIGHT = 900
+    WINDOW_HEIGHT = 800
     BG_COLOR = (250, 250, 250)
 
     def __init__(self, sim: Simulation, config={}):
@@ -38,7 +39,7 @@ class Window:
         self.mouse_last = (0, 0)
         self.mouse_down = False
 
-    def run(self):
+    def run(self, steps_per_update):
         """Shows a window visualizing the simulation and runs the loop function."""
 
         # Create a pygame window
@@ -56,8 +57,14 @@ class Window:
         running = True
         self.draw()
         while running:
+
+            pygame.event.get()
+
             # Update simulation
-            # self.sim.update()
+            for _ in range(steps_per_update):
+                self.sim.update()
+
+            self.draw()
 
             # Update window
             pygame.display.update()
@@ -68,23 +75,50 @@ class Window:
         if filled:
             gfxdraw.filled_polygon(self.screen, vertices, color)
 
+    def rotated_box(self,
+                    pos,
+                    size,
+                    angle=None,
+                    cos=None,
+                    sin=None,
+                    centered=True,
+                    color=(255, 0, 0),
+                    filled=True):
+        """Draws a rectangle center at *pos* with size *size* rotated anti-clockwise by *angle*."""
+        x, y = pos
+        l, h = size
+
+        if angle:
+            cos, sin = np.cos(angle), np.sin(angle)
+
+        vertex = lambda e1, e2: (x + (e1 * l * cos + e2 * h * sin) / 2, y +
+                                 (e1 * l * sin - e2 * h * cos) / 2)
+
+        if centered:
+            vertices = [vertex(*e) for e in [(-1, -1), (-1, 1), (1, 1), (1, -1)]]
+        else:
+            vertices = [vertex(*e) for e in [(0, -1), (0, 1), (2, 1), (2, -1)]]
+
+        # vertices = [(x, y), (x, y + h), (x + l, y + h), (x + l, y)]
+        self.polygon(vertices, color, filled=filled)
+
     def background(self, r, g, b):
         """Fills screen with one color."""
 
         self.screen.fill((r, g, b))
 
-    def _draw_vehicle(self, vehicle: Vehicle, road: Road):
-        pass
+    def _draw_vehicle(self, vehicle: Vehicle):
+        point, cos, sin = vehicle.get_position()
+        self.rotated_box((point.x, point.y), (vehicle.length, vehicle.width),
+                         cos=cos,
+                         sin=sin,
+                         centered=True)
 
     def draw_vehicles(self):
         for road in self.sim.roads:
             # Draw vehicles
             for vehicle in road.vehicles:
-                self._draw_vehicle(vehicle, road)
-
-    @staticmethod
-    def _incline(point1, point2):
-        return (point2.y - point1.y) / (point2.x - point1.x)
+                self._draw_vehicle(vehicle)
 
     def _calc_line_points_by_width(self, point1: Point, point2: Point,
                                    width) -> Tuple[Point, Point]:
@@ -92,7 +126,7 @@ class Window:
         if (point2.x - point1.x == 0):
             inverted_m = 0
         else:
-            m = self._incline(point1, point2)
+            m = (point2.y - point1.y) / (point2.x - point1.x)
             if (m == 0):
                 inverted_m = 999999999999
             else:
@@ -101,7 +135,7 @@ class Window:
         b0 = point1.y - inverted_m * point1.x
 
         a = inverted_m**2 + 1
-        b = 2 * (inverted_m * (b0 - point1.y)) -2 * point1.x
+        b = 2 * (inverted_m * (b0 - point1.y)) - 2 * point1.x
         c = point1.x**2 + (b0 - point1.y)**2 - width**2
 
         # calculate the discriminant
@@ -120,55 +154,36 @@ class Window:
                    width,
                    *points: Iterable[Point],
                    color=(0, 0, 255),
-                   filled=False):
+                   filled=True):
         last_points = ()
-        right_points = []
-        left_points = []
 
         for i, point in enumerate(points):
             if i + 1 >= len(points):
                 break
-            # next_point = points[i + 1]
-            # left_point, right_point = self._calc_line_points_by_width(
-            #     point, next_point, width)
-            # l_incline = self._incline(left_point, next_point)
-            # r_incline = self._incline(right_point, next_point)
-            # if l_incline > r_incline:
-            #     right_points.append(right_point)
-            #     left_points.append(left_point) 
-            # else:
-            #     right_points.append(left_point)
-            #     left_points.append(right_point) 
-
-            # left_point, right_point = self._calc_line_points_by_width(
-            #     next_point, point, width)
-            # l_incline = self._incline(left_point, point)
-            # r_incline = self._incline(right_point, point)
-            # if l_incline > r_incline:
-            #     right_points.append(right_point)
-            #     left_points.append(left_point) 
-            # else:
-            #     right_points.append(left_point)
-            #     left_points.append(right_point) 
 
             next_point = points[i + 1]
             left_point, right_point = self._calc_line_points_by_width(
                 point, next_point, width)
-            
+
             # fill connections with last points if exists
             if last_points:
                 last_point1, last_point2 = last_points
-                self.polygon([right_point, last_point1, last_point2, left_point], color, filled=filled)
-                self.polygon([right_point, last_point2, last_point1, left_point], color, filled=filled)
+                self.polygon(
+                    [right_point, last_point1, last_point2, left_point],
+                    color,
+                    filled=filled)
+                self.polygon(
+                    [right_point, last_point2, last_point1, left_point],
+                    color,
+                    filled=filled)
 
             next_left_point, next_right_point = self._calc_line_points_by_width(
                 next_point, point, width)
             last_points = (next_left_point, next_right_point)
-            self.polygon([left_point, next_left_point, next_right_point, right_point], color, filled=filled)
-        # right_points.reverse()
-        # polygon = left_points + right_points
-        # self.polygon(polygon, color, filled=filled)
-
+            self.polygon(
+                [left_point, next_left_point, next_right_point, right_point],
+                color,
+                filled=filled)
 
     def draw_roads(self):
         """Draw all roads."""
@@ -180,5 +195,5 @@ class Window:
         # Fill background
         self.background(*self.BG_COLOR)
 
-        # self.draw_vehicles()
         self.draw_roads()
+        self.draw_vehicles()
