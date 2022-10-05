@@ -11,7 +11,8 @@ sim = Simulation()
 #     sim.create_road((650, 500), (650, 300), (400, 300), (400, 500), (350, 500))
 # ]
 
-road = sim.create_road(*curve_points((100, 100), (1200, 110), (600, 1400), resolution=30))
+road = sim.create_road(
+    *curve_points((100, 100), (1200, 110), (600, 1400), resolution=30))
 sim.create_gen({
     'vehicle_rate': 20,
     'vehicles': [

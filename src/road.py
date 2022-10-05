@@ -5,6 +5,7 @@ from collections import namedtuple
 
 Point = namedtuple("Point", ["x", "y"])
 
+
 class Road:
     WIDTH = 10
 
@@ -23,7 +24,7 @@ class Road:
         for i, point in enumerate(self.points):
             if not i + 1 < len(self.points):
                 break
-            total_length += distance.euclidean(point, self.points[i+1])
+            total_length += distance.euclidean(point, self.points[i + 1])
             distances_array.append(total_length)
         self.length = total_length
         self.distances_array = distances_array
@@ -34,9 +35,9 @@ class Road:
 
         # Update vehicles
         for i, vehicle in enumerate(self.vehicles):
-            lead = self.vehicles[i-1] if i > 0 else None
+            lead = self.vehicles[i - 1] if i > 0 else None
             vehicle.update(lead, d_time)
-            
+
         vehicle = self.vehicles[0]
         # If first vehicle is out of road bounds
         if vehicle.x >= self.length:

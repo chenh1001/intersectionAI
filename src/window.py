@@ -95,7 +95,9 @@ class Window:
                                  (e1 * l * sin - e2 * h * cos) / 2)
 
         if centered:
-            vertices = [vertex(*e) for e in [(-1, -1), (-1, 1), (1, 1), (1, -1)]]
+            vertices = [
+                vertex(*e) for e in [(-1, -1), (-1, 1), (1, 1), (1, -1)]
+            ]
         else:
             vertices = [vertex(*e) for e in [(0, -1), (0, 1), (2, 1), (2, -1)]]
 

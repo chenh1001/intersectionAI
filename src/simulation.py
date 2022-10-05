@@ -1,6 +1,7 @@
 from road import Road
 from vehicle_generator import VehicleGenerator
 
+
 class Simulation:
     """Update roads and vehicles."""
 
@@ -18,7 +19,7 @@ class Simulation:
         self.d_time: float = 1 / 60  # Simulation time step
         self.roads = []  # Array to store roads
         self.generators = []
-    
+
     def create_gen(self, config={}):
         gen = VehicleGenerator(self, config)
         self.generators.append(gen)
@@ -37,7 +38,7 @@ class Simulation:
         # Update every road
         for road in self.roads:
             road.update(self.d_time)
-        
+
         # Add vehicles
         for gen in self.generators:
             gen.update()
@@ -49,5 +50,3 @@ class Simulation:
     def run(self, steps):
         for _ in range(steps):
             self.update()
-        
-      
