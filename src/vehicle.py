@@ -1,8 +1,4 @@
-import enum
-from math import dist
-import numpy as np
-from typing import List
-from road import Road, Point
+from road import Point
 from scipy.spatial.distance import euclidean
 from copy import copy
 

@@ -1,6 +1,4 @@
-from math import dist
 from scipy.spatial import distance
-from collections import deque
 from collections import namedtuple
 
 Point = namedtuple("Point", ["x", "y"])

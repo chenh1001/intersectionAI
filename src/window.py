@@ -8,8 +8,7 @@ import numpy as np
 
 from simulation import Simulation
 from vehicle import Vehicle
-from road import Road, Point
-from scipy.spatial import distance
+from road import Point
 from copy import copy
 
 

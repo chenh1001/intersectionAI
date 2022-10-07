@@ -3,26 +3,25 @@ from simulation import Simulation
 from window import Window
 
 sim = Simulation()
-reut_roads = [
-    sim.create_road((1200, 500), (1200, 300), (1000, 300)),
-    sim.create_road((750, 500), (950, 500), (950, 300)),
-    sim.create_road((950, 500), (820, 330)),
-    sim.create_road((700, 500), (700, 300)),
-    sim.create_road((650, 500), (650, 300), (400, 300), (400, 500), (350, 500))
-]
+# reut_roads = [
+#     sim.create_road((1200, 500), (1200, 300), (1000, 300)),
+#     sim.create_road((750, 500), (950, 500), (950, 300)),
+#     sim.create_road((950, 500), (820, 330)),
+#     sim.create_road((700, 500), (700, 300)),
+#     sim.create_road((650, 500), (650, 300), (400, 300), (400, 500), (350, 500))
+# ]
 
-# road = sim.create_road(
-#     *curve_points((100, 100), (1200, 110), (600, 1400), resolution=30))
+road = sim.create_road(
+    *curve_points((100, 100), (1200, 110), (600, 1400), resolution=30))
 sim.create_gen({
-    'vehicle_rate':
-    20,
+    'vehicle_rate': 20,
     'vehicles': [
-        # [1, {
-        #     'path': [road],
-        # }],
         [1, {
-            'path': reut_roads,
-        }]
+            'path': [road],
+        }],
+        # [1, {
+        #     'path': reut_roads,
+        # }]
     ]
 })
 # Start simulation
