@@ -1,4 +1,5 @@
 from road import Road
+from copy import copy
 from vehicle_generator import VehicleGenerator
 
 
@@ -11,7 +12,7 @@ class Simulation:
 
         # Update configuration
         for attr, val in config.items():
-            setattr(self, attr, val)
+            setattr(self, attr, copy(val))
 
     def set_default_config(self):
         self.time: float = 0.0  # Time keeping
@@ -35,6 +36,7 @@ class Simulation:
             self.create_road(*road)
 
     def update(self):
+
         # Update every road
         for road in self.roads:
             road.update(self.d_time)
@@ -42,7 +44,28 @@ class Simulation:
         # Add vehicles
         for gen in self.generators:
             gen.update()
+        
+        for road in self.roads:
+            # If road has no vehicles, continue
+            if len(road.vehicles) == 0: continue
 
+            vehicle = road.vehicles[0]
+            # If first vehicle is out of road bounds
+            if vehicle.x >= road.length:
+                vehicle.path.remove(road)
+                # If vehicle has a next road
+                if vehicle.path:
+                    # New length is the remaining path outside the current road
+                    vehicle.x -= road.length
+
+                    # Add it to the next road
+                    next_road = vehicle.path[0]
+                    # next_road = vehicle.path[vehicle.current_road_index]
+                    next_road.vehicles.append(vehicle)
+
+                # In all cases, remove it from its road
+                road.vehicles.remove(vehicle)
+       
         # Increment time
         self.time += self.d_time
         self.frame_count += 1

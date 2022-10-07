@@ -1,5 +1,6 @@
 from vehicle import Vehicle
 from numpy.random import randint
+from copy import copy
 
 
 class VehicleGenerator:
@@ -12,7 +13,7 @@ class VehicleGenerator:
 
         # Update configurations
         for attr, val in config.items():
-            setattr(self, attr, val)
+            setattr(self, attr, copy(val))
 
         # Calculate properties
         self.init_properties()
@@ -35,12 +36,9 @@ class VehicleGenerator:
             if r <= 0:
                 return Vehicle(config)
 
-    added = False
-
     def update(self):
         """Add vehicles"""
-        if not self.added:
-            # if self.sim.time - self.last_added_time >= 60 / self.vehicle_rate:
+        if self.sim.time - self.last_added_time >= 60 / self.vehicle_rate:
             # If time elasped after last added vehicle is
             # greater than vehicle_period; generate a vehicle
             road = self.upcoming_vehicle.path[0]
@@ -51,4 +49,3 @@ class VehicleGenerator:
                 # Reset last_added_time and upcoming_vehicle
                 self.last_added_time = self.sim.time
             self.upcoming_vehicle = self.generate_vehicle()
-            self.added = True

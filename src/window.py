@@ -9,6 +9,8 @@ import numpy as np
 from simulation import Simulation
 from vehicle import Vehicle
 from road import Road, Point
+from scipy.spatial import distance
+from copy import copy
 
 
 class Window:
@@ -27,7 +29,7 @@ class Window:
 
         # Update configurations
         for attr, val in config.items():
-            setattr(self, attr, val)
+            setattr(self, attr, copy(val))
 
     def set_default_config(self):
         """Set default configuration."""
@@ -101,7 +103,6 @@ class Window:
         else:
             vertices = [vertex(*e) for e in [(0, -1), (0, 1), (2, 1), (2, -1)]]
 
-        # vertices = [(x, y), (x, y + h), (x + l, y + h), (x + l, y)]
         self.polygon(vertices, color, filled=filled)
 
     def background(self, r, g, b):
@@ -124,7 +125,7 @@ class Window:
 
     def _calc_line_points_by_width(self, point1: Point, point2: Point,
                                    width) -> Tuple[Point, Point]:
-
+        
         if (point2.x - point1.x == 0):
             inverted_m = 0
         else:
@@ -154,7 +155,7 @@ class Window:
 
     def _draw_road(self,
                    width,
-                   *points: Iterable[Point],
+                   points: Iterable[Point],
                    color=(0, 0, 255),
                    filled=True):
         last_points = ()
@@ -191,7 +192,7 @@ class Window:
         """Draw all roads."""
 
         for road in self.sim.roads:
-            self._draw_road(road.WIDTH, *road.points)
+            self._draw_road(road.WIDTH, road.points)
 
     def draw(self):
         # Fill background

@@ -4,22 +4,13 @@ import numpy as np
 from typing import List
 from road import Road, Point
 from scipy.spatial.distance import euclidean
+from copy import copy
 
 
 class Vehicle:
 
     def __init__(self, config={}):
-        # Set default configuration
-        self.set_default_config()
-
-        # Update configuration
-        for attr, val in config.items():
-            setattr(self, attr, val)
-
         # Calculate properties
-        self.init_properties()
-
-    def set_default_config(self):
         self.length = 10  # Length of vehicle
         self.width = 8  # Length of vehicle
         self.s0 = 4  # min distance between vehicles
@@ -27,35 +18,31 @@ class Vehicle:
         self.a_max = 1.44
         self.b_max = 4.61
 
-        self.path: List[Road] = []
-        self.current_road_index = 0
+        self.path = list()
 
         self.x = 0  # Distance
         self.v = self.v_max  # Velocity
         self.a = 0  # Accelaration
+        
+        # Update configuration
+        for attr, val in config.items():
+            setattr(self, attr, copy(val))
 
-    def init_properties(self):
-        self.sqrt_ab = 2 * np.sqrt(self.a_max * self.b_max)
+    @property
+    def current_road(self):
+        if self.path:
+            return self.path[0]
 
     def get_position(self):
-        current_road = None
         # If out of roads, return None
         if not self.path:
             return None
 
-        for road in self.path:
-            if self.x < road.length:
-                current_road = road
-                break
-
-        # Out of all roads
-        if not current_road:
-            return None
-
+        current_road = self.current_road
         for i, distance in enumerate(current_road.distances_array):
             if self.x < distance:
                 break
-        p1, p2 = road.points[i - 1], road.points[i]
+        p1, p2 = current_road.points[i - 1], current_road.points[i]
         length = self.x - distance
         whole_distance = euclidean(p2, p1)
         angle_cos = (p2.x - p1.x) / whole_distance
