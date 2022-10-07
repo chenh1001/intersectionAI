@@ -14,7 +14,8 @@ reut_roads = [
 # road = sim.create_road(
 #     *curve_points((100, 100), (1200, 110), (600, 1400), resolution=30))
 sim.create_gen({
-    'vehicle_rate': 20,
+    'vehicle_rate':
+    20,
     'vehicles': [
         # [1, {
         #     'path': [road],

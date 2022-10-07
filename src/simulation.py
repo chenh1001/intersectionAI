@@ -44,7 +44,7 @@ class Simulation:
         # Add vehicles
         for gen in self.generators:
             gen.update()
-        
+
         for road in self.roads:
             # If road has no vehicles, continue
             if len(road.vehicles) == 0: continue
@@ -65,7 +65,7 @@ class Simulation:
 
                 # In all cases, remove it from its road
                 road.vehicles.remove(vehicle)
-       
+
         # Increment time
         self.time += self.d_time
         self.frame_count += 1

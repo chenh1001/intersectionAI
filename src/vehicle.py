@@ -23,7 +23,7 @@ class Vehicle:
         self.x = 0  # Distance
         self.v = self.v_max  # Velocity
         self.a = 0  # Accelaration
-        
+
         # Update configuration
         for attr, val in config.items():
             setattr(self, attr, copy(val))

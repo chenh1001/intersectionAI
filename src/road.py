@@ -37,4 +37,3 @@ class Road:
         for i, vehicle in enumerate(self.vehicles):
             lead = self.vehicles[i - 1] if i > 0 else None
             vehicle.update(lead, d_time)
- 

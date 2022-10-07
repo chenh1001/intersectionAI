@@ -125,7 +125,7 @@ class Window:
 
     def _calc_line_points_by_width(self, point1: Point, point2: Point,
                                    width) -> Tuple[Point, Point]:
-        
+
         if (point2.x - point1.x == 0):
             inverted_m = 0
         else:
