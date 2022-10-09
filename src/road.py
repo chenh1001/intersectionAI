@@ -45,16 +45,22 @@ class Road:
                 if traffic_signal.current_cycle:
                     # If traffic signal is green or doesn't exist
                     # Then let vehicles pass
-                    vehicle.unstop()
+                    if traffic_signal == vehicle.stopped_signal:
+                        vehicle.unstop()
+                        vehicle.unslow()
                 else:
+                    if vehicle.x > self.length - traffic_signal.x:
+                        vehicle.unstop()
+                        vehicle.unslow()
                     # If traffic signal is red
-                    if not vehicle.stopped and vehicle.x >= self.length - traffic_signal.x - traffic_signal.slow_distance:
+                    if not vehicle.stopped and vehicle.x >= self.length - traffic_signal.x - traffic_signal.slow_distance and\
+                        vehicle.x < self.length - traffic_signal.x - traffic_signal.stop_distance:
                         # Slow vehicles in slowing zone
-                        vehicle.slow(traffic_signal.slow_factor * vehicle._v_max)
+                        vehicle.slow(traffic_signal.slow_factor * vehicle._v_max, traffic_signal)
                     if vehicle.x >= self.length - traffic_signal.x - traffic_signal.stop_distance and\
                         vehicle.x <= self.length - traffic_signal.x - traffic_signal.stop_distance / 2:
                         # Stop vehicles in the stop zone
-                        vehicle.stop()
+                        vehicle.stop(traffic_signal)
 
     @staticmethod
     def get_position(x, road):

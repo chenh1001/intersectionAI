@@ -17,12 +17,12 @@ road = sim.create_road(
     *curve_points((100, 100), (1200, 110), (600, 1400), resolution=30))
 
 sim.create_traffic_signals_group([TrafficSignal(road, {"x": 1000})],
-                                 [TrafficSignal(road)],
+                                 [TrafficSignal(road, {"x": 400})],
                                  cycles=[(True, False), (False, True)])
 
 sim.create_gen({
     'vehicle_rate':
-    20,
+    10,
     'vehicles': [
         [1, {
             'path': [road],

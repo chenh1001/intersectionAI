@@ -109,7 +109,8 @@ class Window(ConfigurableObject):
         self.rotated_box((point.x, point.y), (vehicle.length, vehicle.width),
                          cos=cos,
                          sin=sin,
-                         centered=True)
+                         centered=True,
+                         color=(0, 0, 255))
 
     def draw_vehicles(self):
         for road in self.sim.roads:
@@ -150,7 +151,7 @@ class Window(ConfigurableObject):
     def _draw_road(self,
                    width,
                    points: Iterable[Point],
-                   color=(0, 0, 255),
+                   color=(180, 180, 220),
                    filled=True):
         last_points = ()
 
@@ -192,9 +193,9 @@ class Window(ConfigurableObject):
         """Draw all roads."""
 
         for signal in self.sim.traffic_signals:
-            point, cos, sin = signal.road.get_position(signal.x, signal.road)
+            point, cos, sin = signal.road.get_position(signal.road.length - signal.x, signal.road)
             color = (0, 255, 0) if signal.current_cycle else (255, 0, 0)
-            self.rotated_box((point.x, point.y), (20, signal.road.WIDTH),
+            self.rotated_box((point.x, point.y), (signal.road.WIDTH, 20),
                          cos=cos,
                          sin=sin,
                          centered=True,

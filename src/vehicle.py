@@ -12,6 +12,7 @@ class Vehicle(ConfigurableObject):
         super().__init__(config)
         self.sqrt_ab = 2 * np.sqrt(self.a_max * self.b_max)
         self.stopped = False
+        self.stopped_signal = None
 
     def set_default_config(self):
         self.length = 10  # Length of vehicle
@@ -57,16 +58,20 @@ class Vehicle(ConfigurableObject):
         self.a = self.a_max * (1 - (self.v / self.v_max)**4 - alpha**2)
 
         if self.stopped: 
-            self.a = -self.b_max*self.v / self.v_max
+            self.a = -self.b_max * self.v / self.v_max
         
-    def stop(self):
+    def stop(self, signal):
         self.stopped = True
+        self.stopped_signal = signal
 
     def unstop(self):
         self.stopped = False
+        self.stopped_signal = None
 
-    def slow(self, v):
+    def slow(self, v, signal):
         self.v_max = v
+        self.stopped_signal = signal
 
     def unslow(self):
         self.v_max = self._v_max
+        self.stopped_signal = None
