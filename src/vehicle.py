@@ -1,12 +1,18 @@
-from road import Point
+from math import dist
+import numpy as np
+from typing import List
+from road import Road, Point
 from scipy.spatial.distance import euclidean
-from copy import copy
+from configurable_object import ConfigurableObject
 
 
-class Vehicle:
+class Vehicle(ConfigurableObject):
 
-    def __init__(self, config={}):
-        # Calculate properties
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs) 
+        self.sqrt_ab = 2 * np.sqrt(self.a_max * self.b_max)
+
+    def set_default_config(self):
         self.length = 10  # Length of vehicle
         self.width = 8  # Length of vehicle
         self.s0 = 4  # min distance between vehicles
@@ -14,15 +20,11 @@ class Vehicle:
         self.a_max = 1.44
         self.b_max = 4.61
 
-        self.path = list()
+        self.path: List[Road] = []
 
         self.x = 0  # Distance
         self.v = self.v_max  # Velocity
         self.a = 0  # Accelaration
-
-        # Update configuration
-        for attr, val in config.items():
-            setattr(self, attr, copy(val))
 
     @property
     def current_road(self):
@@ -57,12 +59,13 @@ class Vehicle:
         else:
             self.v += self.a * dt
             self.x += self.v * dt + self.a * dt * dt / 2
+
         # Update acceleration, copy pasted formula
-        # alpha = 0
-        # if lead:
-        #     delta_x = lead.x - self.x - lead.length
-        #     delta_v = self.v - lead.v
+        alpha = 0
+        if lead:
+            delta_x = lead.x - self.x - lead.length
+            delta_v = self.v - lead.v
 
-        #     alpha = (self.s0 + max(0, self.v + delta_v*self.v/self.sqrt_ab)) / delta_x
+            alpha = (self.s0 + max(0, self.v + delta_v*self.v/self.sqrt_ab)) / delta_x
 
-        # self.a = self.a_max * (1-(self.v/self.v_max)**4 - alpha**2)
+        self.a = self.a_max * (1-(self.v/self.v_max)**4 - alpha**2)

@@ -5,6 +5,7 @@ import pygame
 from pygame import gfxdraw
 from math import sqrt
 import numpy as np
+from configurable_object import ConfigurableObject
 
 from simulation import Simulation
 from vehicle import Vehicle
@@ -12,23 +13,18 @@ from road import Point
 from copy import copy
 
 
-class Window:
+class Window(ConfigurableObject):
     """Window class."""
 
     WINDOW_WIDTH = 1400
     WINDOW_HEIGHT = 800
     BG_COLOR = (250, 250, 250)
 
-    def __init__(self, sim: Simulation, config={}):
+    def __init__(self, sim: Simulation, *args, **kwargs):
+        super().__init__(*args, **kwargs) 
+
         # Simulation to draw
         self.sim: Simulation = sim
-
-        # Set default configurations
-        self.set_default_config()
-
-        # Update configurations
-        for attr, val in config.items():
-            setattr(self, attr, copy(val))
 
     def set_default_config(self):
         """Set default configuration."""

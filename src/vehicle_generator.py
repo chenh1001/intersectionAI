@@ -1,34 +1,26 @@
 from vehicle import Vehicle
 from numpy.random import randint
-from copy import copy
+from configurable_object import ConfigurableObject
 
 
-class VehicleGenerator:
+class VehicleGenerator(ConfigurableObject):
 
-    def __init__(self, sim, config={}):
+    def __init__(self, sim, *args, **kwargs):
+        super().__init__(*args, **kwargs) 
+
         self.sim = sim
-
-        # Set default configurations
-        self.set_default_config()
-
-        # Update configurations
-        for attr, val in config.items():
-            setattr(self, attr, copy(val))
-
-        # Calculate properties
-        self.init_properties()
+        self.upcoming_vehicle = self.generate_vehicle()
 
     def set_default_config(self):
-        """Set default configuration"""
+        """Set default configuration."""
+
         self.vehicle_rate = 20
         self.vehicles = [(1, {})]
         self.last_added_time = 0
 
-    def init_properties(self):
-        self.upcoming_vehicle = self.generate_vehicle()
-
     def generate_vehicle(self):
-        """Returns a random vehicle from self.vehicles with random proportions"""
+        """Returns a random vehicle from self.vehicles with random proportions."""
+
         total = sum(pair[0] for pair in self.vehicles)
         r = randint(1, total + 1)
         for (weight, config) in self.vehicles:
@@ -37,7 +29,8 @@ class VehicleGenerator:
                 return Vehicle(config)
 
     def update(self):
-        """Add vehicles"""
+        """Add vehicles."""
+
         if self.sim.time - self.last_added_time >= 60 / self.vehicle_rate:
             # If time elasped after last added vehicle is
             # greater than vehicle_period; generate a vehicle

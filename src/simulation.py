@@ -1,18 +1,10 @@
 from road import Road
-from copy import copy
 from vehicle_generator import VehicleGenerator
+from configurable_object import ConfigurableObject
 
 
-class Simulation:
+class Simulation(ConfigurableObject):
     """Update roads and vehicles."""
-
-    def __init__(self, config={}):
-        # Set default configuration
-        self.set_default_config()
-
-        # Update configuration
-        for attr, val in config.items():
-            setattr(self, attr, copy(val))
 
     def set_default_config(self):
         self.time: float = 0.0  # Time keeping
@@ -58,10 +50,8 @@ class Simulation:
                     # New length is the remaining path outside the current road
                     vehicle.x -= road.length
 
-                    # Add it to the next road
-                    next_road = vehicle.path[0]
                     # next_road = vehicle.path[vehicle.current_road_index]
-                    next_road.vehicles.append(vehicle)
+                    vehicle.current_road.vehicles.append(vehicle)
 
                 # In all cases, remove it from its road
                 road.vehicles.remove(vehicle)
