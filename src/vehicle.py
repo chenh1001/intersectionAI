@@ -9,7 +9,7 @@ from configurable_object import ConfigurableObject
 class Vehicle(ConfigurableObject):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs) 
+        super().__init__(*args, **kwargs)
         self.sqrt_ab = 2 * np.sqrt(self.a_max * self.b_max)
 
     def set_default_config(self):
@@ -66,6 +66,7 @@ class Vehicle(ConfigurableObject):
             delta_x = lead.x - self.x - lead.length
             delta_v = self.v - lead.v
 
-            alpha = (self.s0 + max(0, self.v + delta_v*self.v/self.sqrt_ab)) / delta_x
+            alpha = (self.s0 + max(
+                0, self.v + delta_v * self.v / self.sqrt_ab)) / delta_x
 
-        self.a = self.a_max * (1-(self.v/self.v_max)**4 - alpha**2)
+        self.a = self.a_max * (1 - (self.v / self.v_max)**4 - alpha**2)

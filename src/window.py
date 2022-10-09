@@ -21,7 +21,7 @@ class Window(ConfigurableObject):
     BG_COLOR = (250, 250, 250)
 
     def __init__(self, sim: Simulation, *args, **kwargs):
-        super().__init__(*args, **kwargs) 
+        super().__init__(*args, **kwargs)
 
         # Simulation to draw
         self.sim: Simulation = sim

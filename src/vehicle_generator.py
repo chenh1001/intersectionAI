@@ -6,7 +6,7 @@ from configurable_object import ConfigurableObject
 class VehicleGenerator(ConfigurableObject):
 
     def __init__(self, sim, *args, **kwargs):
-        super().__init__(*args, **kwargs) 
+        super().__init__(*args, **kwargs)
 
         self.sim = sim
         self.upcoming_vehicle = self.generate_vehicle()
