@@ -1,6 +1,8 @@
+from itertools import cycle
 from curve import curve_points
 from simulation import Simulation
 from window import Window
+from traffic_signal import TrafficSignal
 
 sim = Simulation()
 # reut_roads = [
@@ -13,6 +15,11 @@ sim = Simulation()
 
 road = sim.create_road(
     *curve_points((100, 100), (1200, 110), (600, 1400), resolution=30))
+
+sim.create_traffic_signals_group([TrafficSignal(road, {"x": 1000})],
+                                 [TrafficSignal(road)],
+                                 cycles=[(True, False), (False, True)])
+
 sim.create_gen({
     'vehicle_rate':
     20,

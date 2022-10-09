@@ -5,12 +5,11 @@ import pygame
 from pygame import gfxdraw
 from math import sqrt
 import numpy as np
-from configurable_object import ConfigurableObject
 
+from configurable_object import ConfigurableObject
 from simulation import Simulation
 from vehicle import Vehicle
 from road import Point
-from copy import copy
 
 
 class Window(ConfigurableObject):
@@ -189,9 +188,22 @@ class Window(ConfigurableObject):
         for road in self.sim.roads:
             self._draw_road(road.WIDTH, road.points)
 
+    def draw_signals(self):
+        """Draw all roads."""
+
+        for signal in self.sim.traffic_signals:
+            point, cos, sin = signal.road.get_position(signal.x, signal.road)
+            color = (0, 255, 0) if signal.current_cycle else (255, 0, 0)
+            self.rotated_box((point.x, point.y), (20, signal.road.WIDTH),
+                         cos=cos,
+                         sin=sin,
+                         centered=True,
+                         color=color)
+
     def draw(self):
         # Fill background
         self.background(*self.BG_COLOR)
 
         self.draw_roads()
+        self.draw_signals()
         self.draw_vehicles()

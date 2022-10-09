@@ -1,16 +1,17 @@
 from math import dist
 import numpy as np
 from typing import List
-from road import Road, Point
 from scipy.spatial.distance import euclidean
 from configurable_object import ConfigurableObject
+from road import Road, Point
 
 
 class Vehicle(ConfigurableObject):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, config=None):
+        super().__init__(config)
         self.sqrt_ab = 2 * np.sqrt(self.a_max * self.b_max)
+        self.stopped = False
 
     def set_default_config(self):
         self.length = 10  # Length of vehicle
@@ -19,6 +20,7 @@ class Vehicle(ConfigurableObject):
         self.v_max = 16.6
         self.a_max = 1.44
         self.b_max = 4.61
+        self._v_max = self.v_max
 
         self.path: List[Road] = []
 
@@ -32,24 +34,7 @@ class Vehicle(ConfigurableObject):
             return self.path[0]
 
     def get_position(self):
-        # If out of roads, return None
-        if not self.path:
-            return None
-
-        current_road = self.current_road
-        for i, distance in enumerate(current_road.distances_array):
-            if self.x < distance:
-                break
-        p1, p2 = current_road.points[i - 1], current_road.points[i]
-        length = self.x - distance
-        whole_distance = euclidean(p2, p1)
-        angle_cos = (p2.x - p1.x) / whole_distance
-        angle_sin = (p2.y - p1.y) / whole_distance
-        x = p2.x + angle_cos * length
-        y = p2.y + angle_sin * length
-
-        # Point ,cos, sin
-        return (Point(x, y), angle_cos, angle_sin)
+        return Road.get_position(self.x, self.current_road) 
 
     def update(self, lead, dt):
         # Update position and velocity
@@ -70,3 +55,18 @@ class Vehicle(ConfigurableObject):
                 0, self.v + delta_v * self.v / self.sqrt_ab)) / delta_x
 
         self.a = self.a_max * (1 - (self.v / self.v_max)**4 - alpha**2)
+
+        if self.stopped: 
+            self.a = -self.b_max*self.v / self.v_max
+        
+    def stop(self):
+        self.stopped = True
+
+    def unstop(self):
+        self.stopped = False
+
+    def slow(self, v):
+        self.v_max = v
+
+    def unslow(self):
+        self.v_max = self._v_max

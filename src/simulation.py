@@ -1,3 +1,4 @@
+import enum
 from road import Road
 from vehicle_generator import VehicleGenerator
 from configurable_object import ConfigurableObject
@@ -12,6 +13,7 @@ class Simulation(ConfigurableObject):
         self.d_time: float = 1 / 60  # Simulation time step
         self.roads = []  # Array to store roads
         self.generators = []
+        self.traffic_signals = []
 
     def create_gen(self, config={}):
         gen = VehicleGenerator(self, config)
@@ -26,6 +28,20 @@ class Simulation(ConfigurableObject):
     def create_roads(self, roads):
         for road in roads:
             self.create_road(*road)
+    
+    def create_traffic_signals_group(self, *signal_groups, cycles=None):
+        if not cycles:
+            cycles = []
+            number_of_cycles = len(signal_groups) 
+            for i, signal_group in enumerate(signal_groups):
+                signal_cycle = [False] * number_of_cycles
+                signal_cycle[i] = True
+                cycles.append(signal_cycle)
+
+        for cycle, signal_group in zip(cycles, signal_groups):
+            for signal in signal_group:
+                signal.road.add_traffic_signal(signal, cycle)
+                self.traffic_signals.append(signal)
 
     def update(self):
 
@@ -36,6 +52,9 @@ class Simulation(ConfigurableObject):
         # Add vehicles
         for gen in self.generators:
             gen.update()
+        
+        for signal in self.traffic_signals:
+            signal.update(self.time)
 
         for road in self.roads:
             # If road has no vehicles, continue

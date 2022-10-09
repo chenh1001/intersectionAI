@@ -1,12 +1,12 @@
-from vehicle import Vehicle
 from numpy.random import randint
 from configurable_object import ConfigurableObject
+from vehicle import Vehicle
 
 
 class VehicleGenerator(ConfigurableObject):
 
-    def __init__(self, sim, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, sim, config=None):
+        super().__init__(config)
 
         self.sim = sim
         self.upcoming_vehicle = self.generate_vehicle()
