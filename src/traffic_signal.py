@@ -1,5 +1,6 @@
 from configurable_object import ConfigurableObject
 
+
 class TrafficSignal(ConfigurableObject):
 
     def __init__(self, road, config=None) -> None:
@@ -16,7 +17,7 @@ class TrafficSignal(ConfigurableObject):
 
         self.current_cycle_index = 0
         self.last_t = 0
-        self.cycle_length = 30
+        self.cycle_length = 60
 
     @property
     def current_cycle(self):

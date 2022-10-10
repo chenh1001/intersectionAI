@@ -1,4 +1,4 @@
-def curve_points(start, end, control, resolution=5):
+def curve_points(start, end, control, resolution=30):
 	# If curve is a straight line
 	if (start[0] - end[0])*(start[1] - end[1]) == 0:
 		return [start, end]

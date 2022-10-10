@@ -193,13 +193,14 @@ class Window(ConfigurableObject):
         """Draw all roads."""
 
         for signal in self.sim.traffic_signals:
-            point, cos, sin = signal.road.get_position(signal.road.length - signal.x, signal.road)
+            point, cos, sin = signal.road.get_position(
+                signal.road.length - signal.x, signal.road)
             color = (0, 255, 0) if signal.current_cycle else (255, 0, 0)
             self.rotated_box((point.x, point.y), (signal.road.WIDTH, 20),
-                         cos=cos,
-                         sin=sin,
-                         centered=True,
-                         color=color)
+                             cos=cos,
+                             sin=sin,
+                             centered=True,
+                             color=color)
 
     def draw(self):
         # Fill background

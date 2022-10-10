@@ -28,11 +28,11 @@ class Simulation(ConfigurableObject):
     def create_roads(self, roads):
         for road in roads:
             self.create_road(*road)
-    
+
     def create_traffic_signals_group(self, *signal_groups, cycles=None):
         if not cycles:
             cycles = []
-            number_of_cycles = len(signal_groups) 
+            number_of_cycles = len(signal_groups)
             for i, signal_group in enumerate(signal_groups):
                 signal_cycle = [False] * number_of_cycles
                 signal_cycle[i] = True
@@ -52,7 +52,7 @@ class Simulation(ConfigurableObject):
         # Add vehicles
         for gen in self.generators:
             gen.update()
-        
+
         for signal in self.traffic_signals:
             signal.update(self.time)
 

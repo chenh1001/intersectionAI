@@ -17,7 +17,7 @@ class Vehicle(ConfigurableObject):
     def set_default_config(self):
         self.length = 10  # Length of vehicle
         self.width = 8  # Length of vehicle
-        self.s0 = 4  # min distance between vehicles
+        self.s0 = 10  # min distance between vehicles
         self.v_max = 16.6
         self.a_max = 1.44
         self.b_max = 4.61
@@ -35,7 +35,7 @@ class Vehicle(ConfigurableObject):
             return self.path[0]
 
     def get_position(self):
-        return Road.get_position(self.x, self.current_road) 
+        return Road.get_position(self.x, self.current_road)
 
     def update(self, lead, dt):
         # Update position and velocity
@@ -57,9 +57,9 @@ class Vehicle(ConfigurableObject):
 
         self.a = self.a_max * (1 - (self.v / self.v_max)**4 - alpha**2)
 
-        if self.stopped: 
+        if self.stopped:
             self.a = -self.b_max * self.v / self.v_max
-        
+
     def stop(self, signal):
         self.stopped = True
         self.stopped_signal = signal
