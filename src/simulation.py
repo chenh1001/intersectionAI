@@ -37,6 +37,7 @@ class Simulation(ConfigurableObject):
                 signal_cycle = [False] * number_of_cycles
                 signal_cycle[i] = True
                 cycles.append(signal_cycle)
+        print("CYLES: {}".format(cycles))
 
         for cycle, signal_group in zip(cycles, signal_groups):
             for signal in signal_group:

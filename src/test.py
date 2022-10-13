@@ -99,7 +99,7 @@ EAST_B_LEFT = sim.create_road(EAST_B_LEFT_END, EAST_B_LEFT_START)
 NORTH_EAST = sim.create_road(
     *curve_points(NORTH_F_LEFT_END, EAST_B_LEFT_END, (NORTH_F_LEFT_END[0],
                                                       EAST_B_LEFT_END[1])))
-NORTH_SOUTH_LEFT = sim.create_road(NORTH_F_LEFT_END, SOUTH_B_LEFT_END)
+# NORTH_SOUTH_LEFT = sim.create_road(NORTH_F_LEFT_END, SOUTH_B_LEFT_END)
 NORTH_SOUTH_RIGHT = sim.create_road(NORTH_F_RIGHT_END, SOUTH_B_RIGHT_END)
 NORTH_WEST = sim.create_road(
     *curve_points(NORTH_F_RIGHT_END, WEST_B_RIGHT_END, (NORTH_F_RIGHT_END[0],
@@ -108,7 +108,7 @@ NORTH_WEST = sim.create_road(
 SOUTH_EAST = sim.create_road(
     *curve_points(SOUTH_F_RIGHT_END, EAST_B_RIGHT_END, (SOUTH_F_RIGHT_END[0],
                                                         EAST_B_RIGHT_END[1])))
-SOUTH_NORTH_LEFT = sim.create_road(SOUTH_F_LEFT_END, NORTH_B_LEFT_END)
+# SOUTH_NORTH_LEFT = sim.create_road(SOUTH_F_LEFT_END, NORTH_B_LEFT_END)
 SOUTH_NORTH_RIGHT = sim.create_road(SOUTH_F_RIGHT_END, NORTH_B_RIGHT_END)
 SOUTH_WEST = sim.create_road(
     *curve_points(SOUTH_F_LEFT_END, WEST_B_LEFT_END, (SOUTH_F_LEFT_END[0],
@@ -117,7 +117,7 @@ SOUTH_WEST = sim.create_road(
 WEST_SOUTH = sim.create_road(
     *curve_points(WEST_F_RIGHT_END, SOUTH_B_RIGHT_END, (SOUTH_B_RIGHT_END[0],
                                                         WEST_F_RIGHT_END[1])))
-WEST_EAST_LEFT = sim.create_road(WEST_F_LEFT_END, EAST_B_LEFT_END)
+# WEST_EAST_LEFT = sim.create_road(WEST_F_LEFT_END, EAST_B_LEFT_END)
 WEST_EAST_RIGHT = sim.create_road(WEST_F_RIGHT_END, EAST_B_RIGHT_END)
 WEST_NORTH = sim.create_road(
     *curve_points(WEST_F_LEFT_END, NORTH_B_LEFT_END, (NORTH_B_LEFT_END[0],
@@ -126,7 +126,7 @@ WEST_NORTH = sim.create_road(
 EAST_SOUTH = sim.create_road(
     *curve_points(EAST_F_LEFT_END, SOUTH_B_LEFT_END, (SOUTH_B_LEFT_END[0],
                                                       EAST_F_LEFT_END[1])))
-EAST_WEST_LEFT = sim.create_road(EAST_F_LEFT_END, WEST_B_LEFT_END)
+# EAST_WEST_LEFT = sim.create_road(EAST_F_LEFT_END, WEST_B_LEFT_END)
 EAST_WEST_RIGHT = sim.create_road(EAST_F_RIGHT_END, WEST_B_RIGHT_END)
 EAST_NORTH = sim.create_road(
     *curve_points(EAST_F_RIGHT_END, NORTH_B_RIGHT_END, (NORTH_B_RIGHT_END[0],
@@ -134,16 +134,17 @@ EAST_NORTH = sim.create_road(
 
 sim.create_traffic_signals_group([
     TrafficSignal(NORTH_F_RIGHT),
-    TrafficSignal(NORTH_F_LEFT),
-    TrafficSignal(SOUTH_F_LEFT),
     TrafficSignal(SOUTH_F_RIGHT)
 ], [
-    TrafficSignal(WEST_F_LEFT),
+    TrafficSignal(NORTH_F_LEFT),
+    TrafficSignal(SOUTH_F_LEFT)
+], [
     TrafficSignal(WEST_F_RIGHT),
-    TrafficSignal(EAST_F_LEFT),
     TrafficSignal(EAST_F_RIGHT)
-],
-                                 cycles=[(True, False), (False, True)])
+], [
+    TrafficSignal(WEST_F_LEFT),
+    TrafficSignal(EAST_F_LEFT)
+])
 
 sim.create_gen({
     'vehicle_rate':
@@ -159,22 +160,13 @@ sim.create_gen({
             'path': [NORTH_F_RIGHT, NORTH_SOUTH_RIGHT, WEST_B_RIGHT],
         }],
         [1, {
-            'path': [NORTH_F_LEFT, NORTH_SOUTH_LEFT, SOUTH_B_LEFT],
-        }],
-        [1, {
             'path': [SOUTH_F_RIGHT, SOUTH_EAST, EAST_B_RIGHT],
         }],
         [1, {
             'path': [SOUTH_F_LEFT, SOUTH_WEST, WEST_B_LEFT],
         }],
         [1, {
-            'path': [SOUTH_F_LEFT, SOUTH_NORTH_LEFT, NORTH_B_LEFT],
-        }],
-        [1, {
             'path': [SOUTH_F_RIGHT, SOUTH_NORTH_RIGHT, NORTH_B_RIGHT],
-        }],
-        [1, {
-            'path': [WEST_F_LEFT, WEST_EAST_LEFT, EAST_B_LEFT],
         }],
         [1, {
             'path': [WEST_F_RIGHT, WEST_EAST_RIGHT, EAST_B_RIGHT],
@@ -184,9 +176,6 @@ sim.create_gen({
         }],
         [1, {
             'path': [WEST_F_LEFT, WEST_NORTH, NORTH_B_LEFT],
-        }],
-        [1, {
-            'path': [EAST_F_LEFT, EAST_WEST_LEFT, WEST_B_LEFT],
         }],
         [1, {
             'path': [EAST_F_RIGHT, EAST_WEST_RIGHT, WEST_B_RIGHT],
@@ -201,4 +190,4 @@ sim.create_gen({
 })
 # Start simulation
 win = Window(sim)
-win.run(10)
+win.run(20)

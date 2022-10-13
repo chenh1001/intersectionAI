@@ -24,5 +24,5 @@ class TrafficSignal(ConfigurableObject):
         return self.cycle[self.current_cycle_index]
 
     def update(self, time):
-        k = (time // self.cycle_length) % 2
+        k = (time // self.cycle_length) % len(self.cycle)
         self.current_cycle_index = int(k)
