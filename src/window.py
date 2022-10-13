@@ -29,7 +29,7 @@ class Window(ConfigurableObject):
         """Set default configuration."""
 
         self.fps = 60
-        self.zoom = 5
+        self.zoom = 2
         self.offset = (0, 0)
 
         self.mouse_last = (0, 0)
