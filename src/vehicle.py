@@ -15,9 +15,9 @@ class Vehicle(ConfigurableObject):
         self.stopped_signal = None
 
     def set_default_config(self):
-        self.length = 10  # Length of vehicle
-        self.width = 8  # Length of vehicle
-        self.s0 = 10  # min distance between vehicles
+        self.length = 20  # Length of vehicle
+        self.width = 10  # Length of vehicle
+        self.s0 = 20  # min distance between vehicles
         self.v_max = 16.6
         self.a_max = 1.44
         self.b_max = 4.61

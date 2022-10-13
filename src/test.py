@@ -13,32 +13,38 @@ sim = Simulation()
 #     sim.create_road((650, 500), (650, 300), (400, 300), (400, 500), (350, 500))
 # ]
 
-# road = sim.create_road(
-#     *curve_points((100, 100), (1200, 110), (600, 1400), resolution=30))
-X = 20
-NORTH_START =  (700, 0)
-NORTH_END =  (700, 350)
+# Play with these
+# n = 15
+# a = 2
+# b = 12
+# l = 300
+
+X = 50
+L = 1000
+A = 100
+NORTH_START =  (0, -L)
+NORTH_END =  (0, -A)
 NORTH_F_START = (NORTH_START[0] - X, NORTH_START[1])
 NORTH_F_END = (NORTH_START[0] - X, NORTH_END[1])
 NORTH_B_START = (NORTH_START[0] + X, NORTH_START[1])
 NORTH_B_END = (NORTH_START[0] + X, NORTH_END[1])
 
-SOUTH_START =  (700, 800)
-SOUTH_END =  (700, 450)
+SOUTH_START =  (0, L)
+SOUTH_END =  (0, A)
 SOUTH_F_START = (SOUTH_START[0] + X, SOUTH_START[1])
 SOUTH_F_END = (SOUTH_START[0] + X, SOUTH_END[1])
 SOUTH_B_START = (SOUTH_START[0] - X, SOUTH_START[1])
 SOUTH_B_END = (SOUTH_START[0] - X, SOUTH_END[1])
 
-WEST_START = (0, 400)
-WEST_END = (650, 400)
+WEST_START = (-L, 0)
+WEST_END = (-A, 0)
 WEST_F_START = (WEST_START[0], WEST_START[1] + X)
 WEST_F_END = (WEST_END[0], WEST_END[1] + X)
 WEST_B_START = (WEST_START[0], WEST_START[1] - X)
 WEST_B_END = (WEST_END[0], WEST_END[1] - X)
 
-EAST_START = (1400, 400)
-EAST_END = (750, 400)
+EAST_START = (L, 0)
+EAST_END = (A, 0)
 EAST_F_START = (EAST_START[0], EAST_START[1] - X)
 EAST_F_END = (EAST_END[0], EAST_END[1] - X)
 EAST_B_START = (EAST_START[0], EAST_START[1] + X)
@@ -115,9 +121,6 @@ sim.create_gen({
         [1, {
             'path': [EAST_F, EAST_NORTH, NORTH_B],
         }],
-                # [1, {
-        #     'path': reut_roads,
-        # }]
     ]
 })
 # Start simulation

@@ -51,25 +51,60 @@ class Window(ConfigurableObject):
 
         # Draw loop
         running = True
-        self.draw()
         while running:
-
-            pygame.event.get()
-
             # Update simulation
-            for _ in range(steps_per_update):
-                self.sim.update()
+            self.sim.run(steps_per_update)
 
+            # Draw simulation
             self.draw()
 
             # Update window
             pygame.display.update()
             clock.tick(self.fps)
 
+            # Handle all events
+            for event in pygame.event.get():
+                # Quit program if window is closed
+                if event.type == pygame.QUIT:
+                    running = False
+                # Handle mouse events
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    # If mouse button down
+                    if event.button == 1:
+                        # Left click
+                        x, y = pygame.mouse.get_pos()
+                        x0, y0 = self.offset
+                        self.mouse_last = (x-x0*self.zoom, y-y0*self.zoom)
+                        self.mouse_down = True
+                    if event.button == 4:
+                        # Mouse wheel up
+                        self.zoom *=  (self.zoom**2+self.zoom/4+1) / (self.zoom**2+1)
+                    if event.button == 5:
+                        # Mouse wheel down 
+                        self.zoom *= (self.zoom**2+1) / (self.zoom**2+self.zoom/4+1)
+                elif event.type == pygame.MOUSEMOTION:
+                    # Drag content
+                    if self.mouse_down:
+                        x1, y1 = self.mouse_last
+                        x2, y2 = pygame.mouse.get_pos()
+                        self.offset = ((x2-x1)/self.zoom, (y2-y1)/self.zoom)
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    self.mouse_down = False           
+
+    def convert(self, x, y=None):
+        """Converts simulation coordinates to screen coordinates"""
+        if isinstance(x, list):
+            return [self.convert(e[0], e[1]) for e in x]
+        if isinstance(x, tuple):
+            return self.convert(*x)
+        return (int(self.WINDOW_WIDTH / 2 + (x + self.offset[0]) * self.zoom),
+                int(self.WINDOW_HEIGHT / 2 + (y + self.offset[1]) * self.zoom))
+
     def polygon(self, vertices, color, filled=True):
-        gfxdraw.aapolygon(self.screen, vertices, color)
+        converted_vertices = self.convert(vertices)
+        gfxdraw.aapolygon(self.screen, converted_vertices, color)
         if filled:
-            gfxdraw.filled_polygon(self.screen, vertices, color)
+            gfxdraw.filled_polygon(self.screen, converted_vertices, color)
 
     def rotated_box(self,
                     pos,
@@ -196,7 +231,7 @@ class Window(ConfigurableObject):
             point, cos, sin = signal.road.get_position(
                 signal.road.length - signal.x, signal.road)
             color = (0, 255, 0) if signal.current_cycle else (255, 0, 0)
-            self.rotated_box((point.x, point.y), (signal.road.WIDTH, 20),
+            self.rotated_box((point.x, point.y), (10, signal.road.WIDTH * 2),
                              cos=cos,
                              sin=sin,
                              centered=True,

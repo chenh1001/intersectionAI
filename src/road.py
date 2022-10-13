@@ -5,7 +5,7 @@ Point = namedtuple("Point", ["x", "y"])
 
 
 class Road:
-    WIDTH = 10
+    WIDTH = 15
 
     def __init__(self, *points):
         self.points = list(points)
