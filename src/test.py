@@ -148,21 +148,21 @@ sim.create_traffic_signals_group([
 
 sim.create_gen({
     'vehicle_rate':
-    50,
+    15,
     'vehicles': [
-        [1, {
+        [2, {
             'path': [NORTH_F_LEFT, NORTH_EAST, EAST_B_LEFT],
         }],
         [1, {
             'path': [NORTH_F_RIGHT, NORTH_WEST, WEST_B_RIGHT],
         }],
         [1, {
-            'path': [NORTH_F_RIGHT, NORTH_SOUTH_RIGHT, WEST_B_RIGHT],
+            'path': [NORTH_F_RIGHT, NORTH_SOUTH_RIGHT, SOUTH_B_RIGHT],
         }],
         [1, {
             'path': [SOUTH_F_RIGHT, SOUTH_EAST, EAST_B_RIGHT],
         }],
-        [1, {
+        [2, {
             'path': [SOUTH_F_LEFT, SOUTH_WEST, WEST_B_LEFT],
         }],
         [1, {
@@ -174,13 +174,13 @@ sim.create_gen({
         [1, {
             'path': [WEST_F_RIGHT, WEST_SOUTH, SOUTH_B_RIGHT],
         }],
-        [1, {
+        [2, {
             'path': [WEST_F_LEFT, WEST_NORTH, NORTH_B_LEFT],
         }],
         [1, {
             'path': [EAST_F_RIGHT, EAST_WEST_RIGHT, WEST_B_RIGHT],
         }],
-        [1, {
+        [2, {
             'path': [EAST_F_LEFT, EAST_SOUTH, SOUTH_B_LEFT],
         }],
         [1, {
@@ -190,4 +190,4 @@ sim.create_gen({
 })
 # Start simulation
 win = Window(sim)
-win.run(20)
+win.run(30)
