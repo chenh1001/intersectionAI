@@ -99,7 +99,6 @@ EAST_B_LEFT = sim.create_road(EAST_B_LEFT_END, EAST_B_LEFT_START)
 NORTH_EAST = sim.create_road(
     *curve_points(NORTH_F_LEFT_END, EAST_B_LEFT_END, (NORTH_F_LEFT_END[0],
                                                       EAST_B_LEFT_END[1])))
-# NORTH_SOUTH_LEFT = sim.create_road(NORTH_F_LEFT_END, SOUTH_B_LEFT_END)
 NORTH_SOUTH_RIGHT = sim.create_road(NORTH_F_RIGHT_END, SOUTH_B_RIGHT_END)
 NORTH_WEST = sim.create_road(
     *curve_points(NORTH_F_RIGHT_END, WEST_B_RIGHT_END, (NORTH_F_RIGHT_END[0],
@@ -108,7 +107,6 @@ NORTH_WEST = sim.create_road(
 SOUTH_EAST = sim.create_road(
     *curve_points(SOUTH_F_RIGHT_END, EAST_B_RIGHT_END, (SOUTH_F_RIGHT_END[0],
                                                         EAST_B_RIGHT_END[1])))
-# SOUTH_NORTH_LEFT = sim.create_road(SOUTH_F_LEFT_END, NORTH_B_LEFT_END)
 SOUTH_NORTH_RIGHT = sim.create_road(SOUTH_F_RIGHT_END, NORTH_B_RIGHT_END)
 SOUTH_WEST = sim.create_road(
     *curve_points(SOUTH_F_LEFT_END, WEST_B_LEFT_END, (SOUTH_F_LEFT_END[0],
@@ -117,7 +115,6 @@ SOUTH_WEST = sim.create_road(
 WEST_SOUTH = sim.create_road(
     *curve_points(WEST_F_RIGHT_END, SOUTH_B_RIGHT_END, (SOUTH_B_RIGHT_END[0],
                                                         WEST_F_RIGHT_END[1])))
-# WEST_EAST_LEFT = sim.create_road(WEST_F_LEFT_END, EAST_B_LEFT_END)
 WEST_EAST_RIGHT = sim.create_road(WEST_F_RIGHT_END, EAST_B_RIGHT_END)
 WEST_NORTH = sim.create_road(
     *curve_points(WEST_F_LEFT_END, NORTH_B_LEFT_END, (NORTH_B_LEFT_END[0],
@@ -126,7 +123,6 @@ WEST_NORTH = sim.create_road(
 EAST_SOUTH = sim.create_road(
     *curve_points(EAST_F_LEFT_END, SOUTH_B_LEFT_END, (SOUTH_B_LEFT_END[0],
                                                       EAST_F_LEFT_END[1])))
-# EAST_WEST_LEFT = sim.create_road(EAST_F_LEFT_END, WEST_B_LEFT_END)
 EAST_WEST_RIGHT = sim.create_road(EAST_F_RIGHT_END, WEST_B_RIGHT_END)
 EAST_NORTH = sim.create_road(
     *curve_points(EAST_F_RIGHT_END, NORTH_B_RIGHT_END, (NORTH_B_RIGHT_END[0],
@@ -144,7 +140,7 @@ sim.create_traffic_signals_group([
 ], [
     TrafficSignal(WEST_F_LEFT),
     TrafficSignal(EAST_F_LEFT)
-])
+], timers=[20, 60, 20, 60])
 
 sim.create_gen({
     'vehicle_rate':
@@ -188,6 +184,7 @@ sim.create_gen({
         }],
     ]
 })
+
 # Start simulation
 win = Window(sim)
 win.run(30)

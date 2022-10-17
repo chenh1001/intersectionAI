@@ -27,8 +27,7 @@ class Road:
         self.length = total_length
         self.distances_array = distances_array
 
-    def add_traffic_signal(self, signal, cycle):
-        signal.cycle = cycle
+    def add_traffic_signal(self, signal):
         self.signals.append(signal)
 
     def update(self, d_time):
@@ -42,7 +41,7 @@ class Road:
 
             for traffic_signal in self.signals:
 
-                if traffic_signal.current_cycle:
+                if traffic_signal.is_active:
                     # If traffic signal is green or doesn't exist
                     # Then let vehicles pass
                     if traffic_signal == vehicle.stopped_signal:

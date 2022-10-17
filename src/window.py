@@ -227,10 +227,10 @@ class Window(ConfigurableObject):
     def draw_signals(self):
         """Draw all roads."""
 
-        for signal in self.sim.traffic_signals:
+        for signal in self.sim.traffic_signals_manager.signals:
             point, cos, sin = signal.road.get_position(
                 signal.road.length - signal.x, signal.road)
-            color = (0, 255, 0) if signal.current_cycle else (255, 0, 0)
+            color = (0, 255, 0) if signal.is_active else (255, 0, 0)
             self.rotated_box((point.x, point.y), (10, signal.road.WIDTH * 2),
                              cos=cos,
                              sin=sin,
