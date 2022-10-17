@@ -128,19 +128,16 @@ EAST_NORTH = sim.create_road(
     *curve_points(EAST_F_RIGHT_END, NORTH_B_RIGHT_END, (NORTH_B_RIGHT_END[0],
                                                         EAST_F_RIGHT_END[1])))
 
-sim.create_traffic_signals_group([
-    TrafficSignal(NORTH_F_RIGHT),
-    TrafficSignal(SOUTH_F_RIGHT)
-], [
-    TrafficSignal(NORTH_F_LEFT),
-    TrafficSignal(SOUTH_F_LEFT)
-], [
-    TrafficSignal(WEST_F_RIGHT),
-    TrafficSignal(EAST_F_RIGHT)
-], [
-    TrafficSignal(WEST_F_LEFT),
-    TrafficSignal(EAST_F_LEFT)
-], timers=[20, 60, 20, 60])
+sim.create_traffic_signals_group(
+    [TrafficSignal(NORTH_F_RIGHT),
+     TrafficSignal(SOUTH_F_RIGHT)],
+    [TrafficSignal(NORTH_F_LEFT),
+     TrafficSignal(SOUTH_F_LEFT)],
+    [TrafficSignal(WEST_F_RIGHT),
+     TrafficSignal(EAST_F_RIGHT)],
+    [TrafficSignal(WEST_F_LEFT),
+     TrafficSignal(EAST_F_LEFT)],
+    timers=[20, 60, 20, 60])
 
 sim.create_gen({
     'vehicle_rate':

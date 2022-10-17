@@ -33,12 +33,14 @@ class Simulation(ConfigurableObject):
     def create_traffic_signals_group(self, *signal_groups, timers=None):
         if timers:
             if len(timers) != len(signal_groups):
-                raise ValueError("timers length should match signal groups length") 
+                raise ValueError(
+                    "timers length should match signal groups length")
         else:
             timers = [60 for _ in signal_groups]
 
-        self.traffic_signals_manager.add_traffic_signals_group(signal_groups, timers)
-        
+        self.traffic_signals_manager.add_traffic_signals_group(
+            signal_groups, timers)
+
     def update(self):
 
         # Update every road

@@ -27,6 +27,7 @@ class TrafficSignal(ConfigurableObject):
     #     k = (time // self.cycle_length) % len(self.cycle)
     #     self.current_cycle_index = int(k)
 
+
 @dataclass
 class Intersection:
     """Signals properties of an intersection"""
@@ -43,7 +44,7 @@ class Intersection:
         for i, timers_sum in enumerate(timers_sums):
             if delta_time < timers_sum:
                 break
-        return i 
+        return i
 
 
 class TrafficSignalManager(ConfigurableObject):
@@ -52,7 +53,7 @@ class TrafficSignalManager(ConfigurableObject):
         super().__init__(config)
 
         self.intersections = []
-    
+
     @property
     def signals(self):
         for intersection in self.intersections:
@@ -61,7 +62,8 @@ class TrafficSignalManager(ConfigurableObject):
                     yield signal
 
     def add_traffic_signals_group(self, signal_groups, timers):
-        assert len(signal_groups) == len(timers), "Signals groups and timers len should be equal."
+        assert len(signal_groups) == len(
+            timers), "Signals groups and timers len should be equal."
 
         self.intersections.append(Intersection(signal_groups, timers))
         for signal_group in signal_groups:
