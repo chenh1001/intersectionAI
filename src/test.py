@@ -137,7 +137,7 @@ sim.create_traffic_signals_group(
      TrafficSignal(EAST_F_RIGHT)],
     [TrafficSignal(WEST_F_LEFT),
      TrafficSignal(EAST_F_LEFT)],
-    timers=[20, 60, 20, 60])
+    timers=[60, 60, 60, 60])
 
 sim.create_gen({
     'vehicle_rate':
