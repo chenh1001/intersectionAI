@@ -74,22 +74,26 @@ class Window(ConfigurableObject):
                         # Left click
                         x, y = pygame.mouse.get_pos()
                         x0, y0 = self.offset
-                        self.mouse_last = (x-x0*self.zoom, y-y0*self.zoom)
+                        self.mouse_last = (x - x0 * self.zoom,
+                                           y - y0 * self.zoom)
                         self.mouse_down = True
                     if event.button == 4:
                         # Mouse wheel up
-                        self.zoom *=  (self.zoom**2+self.zoom/4+1) / (self.zoom**2+1)
+                        self.zoom *= (self.zoom**2 + self.zoom / 4 +
+                                      1) / (self.zoom**2 + 1)
                     if event.button == 5:
-                        # Mouse wheel down 
-                        self.zoom *= (self.zoom**2+1) / (self.zoom**2+self.zoom/4+1)
+                        # Mouse wheel down
+                        self.zoom *= (self.zoom**2 + 1) / (self.zoom**2 +
+                                                           self.zoom / 4 + 1)
                 elif event.type == pygame.MOUSEMOTION:
                     # Drag content
                     if self.mouse_down:
                         x1, y1 = self.mouse_last
                         x2, y2 = pygame.mouse.get_pos()
-                        self.offset = ((x2-x1)/self.zoom, (y2-y1)/self.zoom)
+                        self.offset = ((x2 - x1) / self.zoom,
+                                       (y2 - y1) / self.zoom)
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    self.mouse_down = False           
+                    self.mouse_down = False
 
     def convert(self, x, y=None):
         """Converts simulation coordinates to screen coordinates"""
