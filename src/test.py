@@ -1,7 +1,7 @@
 from itertools import cycle
 from curve import curve_points
 from simulation import Simulation
-from window import Window
+from manager import simulationManager
 from traffic_signal import TrafficSignal
 from road import Road
 
@@ -183,5 +183,5 @@ sim.create_gen({
 })
 
 # Start simulation
-win = Window(sim)
+win = simulationManager(sim)
 win.run(30)

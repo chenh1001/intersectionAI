@@ -19,8 +19,8 @@ class Window(ConfigurableObject):
     WINDOW_HEIGHT = 800
     BG_COLOR = (250, 250, 250)
 
-    def __init__(self, sim: Simulation, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, sim: Simulation, config):
+        super().__init__(config)
 
         # Simulation to draw
         self.sim: Simulation = sim
@@ -35,66 +35,25 @@ class Window(ConfigurableObject):
         self.mouse_last = (0, 0)
         self.mouse_down = False
 
-    def run(self, steps_per_update):
-        """Shows a window visualizing the simulation and runs the loop function."""
-
+    def init_window(self):
         # Create a pygame window
         self.screen = pygame.display.set_mode(
             (self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.flip()
 
         # Fixed fps
-        clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
 
         # To draw text
         pygame.font.init()
 
-        # Draw loop
-        running = True
-        while running:
-            # Update simulation
-            self.sim.run(steps_per_update)
-
-            # Draw simulation
+    def update(self, with_draw=True):
+        # Update window
+        pygame.display.update()
+        self.clock.tick(self.fps)
+        if with_draw:
             self.draw()
-
-            # Update window
-            pygame.display.update()
-            clock.tick(self.fps)
-
-            # Handle all events
-            for event in pygame.event.get():
-                # Quit program if window is closed
-                if event.type == pygame.QUIT:
-                    running = False
-                # Handle mouse events
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    # If mouse button down
-                    if event.button == 1:
-                        # Left click
-                        x, y = pygame.mouse.get_pos()
-                        x0, y0 = self.offset
-                        self.mouse_last = (x - x0 * self.zoom,
-                                           y - y0 * self.zoom)
-                        self.mouse_down = True
-                    if event.button == 4:
-                        # Mouse wheel up
-                        self.zoom *= (self.zoom**2 + self.zoom / 4 +
-                                      1) / (self.zoom**2 + 1)
-                    if event.button == 5:
-                        # Mouse wheel down
-                        self.zoom *= (self.zoom**2 + 1) / (self.zoom**2 +
-                                                           self.zoom / 4 + 1)
-                elif event.type == pygame.MOUSEMOTION:
-                    # Drag content
-                    if self.mouse_down:
-                        x1, y1 = self.mouse_last
-                        x2, y2 = pygame.mouse.get_pos()
-                        self.offset = ((x2 - x1) / self.zoom,
-                                       (y2 - y1) / self.zoom)
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    self.mouse_down = False
-
+            
     def convert(self, x, y=None):
         """Converts simulation coordinates to screen coordinates"""
         if isinstance(x, list):
